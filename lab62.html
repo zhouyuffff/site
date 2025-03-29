@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quadratic Equation Solver</title>
+    <style>body{font-family:Arial;display:flex;flex-direction:column;align-items:center;justify-content:center;height:100vh}input{width:50px;margin:0 5px;padding:5px;font-size:18px}#solution{margin-top:20px;font-size:20px}</style>
+</head>
+<body>
+    <div><input type="number" id="a" value="1">x² + <input type="number" id="b" value="0">x + <input type="number" id="c" value="0"> = 0</div>
+    <button onclick="s()">Solve</button>
+    <div id="solution">Solution area</div>
+    <script>
+        function s() {
+            const [a, b, c] = [+document.getElementById('a').value, +document.getElementById('b').value, +document.getElementById('c').value];
+            if (!a) document.getElementById('solution').innerHTML =!b? c? 'No solution' : 'True for all x' : `x = ${-c / b}`;
+            else {
+                const d = b * b - 4 * a * c, x = -b / (2 * a), sqrt = Math.sqrt(Math.abs(d));
+                document.getElementById('solution').innerHTML = d > 0? `x1 = ${x + sqrt / (2 * a)}, x2 = ${x - sqrt / (2 * a)}` : d? `x1 = ${x}+${sqrt / (2 * a)}i, x2 = ${x}-${sqrt / (2 * a)}i` : `x = ${x}`;
+            }
+        }
+    </script>
+</body>
+</html>    
