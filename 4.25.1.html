@@ -1,0 +1,81 @@
+// Available colors for balloons
+const balloonColors = ['red', 'orange', 'yellow', 'green', 'black', 'blue', 'purple'];
+
+class Balloon {
+    constructor(x, y, diameter) {
+        this.x = x;
+        this.y = y;
+        this.diameter = diameter;
+        this.color = balloonColors[Math.floor(Math.random() * balloonColors.length)];
+        this.speed = Math.random() * 2 + 1;
+        this.isBurst = false;
+    }
+
+    rise() {
+        if (!this.isBurst) {
+            this.y -= this.speed;
+            // Increase diameter as the balloon rises
+            this.diameter += 0.1;
+            // Check if the balloon should burst
+            if (this.y < 100) {
+                this.isBurst = true;
+            }
+        }
+    }
+
+    draw(context) {
+        if (!this.isBurst) {
+            context.beginPath();
+            context.arc(this.x, this.y, this.diameter / 2, 0, 2 * Math.PI);
+            context.fillStyle = this.color;
+            context.fill();
+            context.closePath();
+        }
+    }
+}
+
+class BalloonManager {
+    constructor(canvas) {
+        this.canvas = canvas;
+        this.context = canvas.getContext('2d');
+        this.balloons = [];
+        this.createBalloons();
+        this.animationFrameId = null;
+    }
+
+    createBalloons() {
+        for (let i = 0; i < 10; i++) {
+            const x = Math.random() * this.canvas.width;
+            const y = this.canvas.height;
+            const diameter = Math.random() * 30 + 20;
+            this.balloons.push(new Balloon(x, y, diameter));
+        }
+    }
+
+    animate() {
+        this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        for (let i = 0; i < this.balloons.length; i++) {
+            const balloon = this.balloons[i];
+            balloon.rise();
+            balloon.draw(this.context);
+        }
+        this.animationFrameId = requestAnimationFrame(() => this.animate());
+    }
+
+    start() {
+        this.animate();
+    }
+
+    stop() {
+        cancelAnimationFrame(this.animationFrameId);
+    }
+}
+
+// Create the canvas and start the animation
+const canvas = document.createElement('canvas');
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+document.body.appendChild(canvas);
+
+const balloonManager = new BalloonManager(canvas);
+balloonManager.start();    
