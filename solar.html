@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="text-align: center;">
+    <title>太阳系模拟表格展示</title>
+    <style>
+        table {
+            border-collapse: collapse;
+        }
+
+        table,
+        th,
+        td {
+            border: 1px solid black;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>太阳系模拟</h1>
+    <button id="showTableButton">点击显示表格</button>
+    <div id="tableContainer"></div>
+
+    <script>
+        // 模拟太阳系对象数据，这里只是示例数据，实际需要从你的模拟中获取
+        const solarSystemObjects = [
+            {
+                name: "水星",
+                mass: 3.3011e23,
+                orbitalRadius: 57909000,
+                color: "灰色",
+                diameter: 4880
+            },
+            {
+                name: "金星",
+                mass: 4.8675e24,
+                orbitalRadius: 108208930,
+                color: "橙黄色",
+                diameter: 12103.6
+            },
+            // 更多对象数据...
+        ];
+
+        document.getElementById('showTableButton').addEventListener('click', function () {
+            const table = document.createElement('table');
+            const thead = document.createElement('thead');
+            const tbody = document.createElement('tbody');
+
+            // 创建表头
+            const headers = ['名称', '质量', '轨道半径', '颜色', '直径'];
+            const headerRow = document.createElement('tr');
+            headers.forEach(headerText => {
+                const th = document.getElementById('th');
+                th.textContent = headerText;
+                headerRow.appendChild(th);
+            });
+            thead.appendChild(headerRow);
+
+            // 填充表格内容
+            solarSystemObjects.forEach(object => {
+                const row = document.createElement('tr');
+                const nameCell = document.createElement('td');
+                const massCell = document.createElement('td');
+                const orbitalRadiusCell = document.createElement('td');
+                const colorCell = document.createElement('td');
+                const diameterCell = document.createElement('td');
+
+                nameCell.textContent = object.name;
+                massCell.textContent = object.mass;
+                orbitalRadiusCell.textContent = object.orbitalRadius;
+                colorCell.textContent = object.color;
+                diameterCell.textContent = object.diameter;
+
+                row.appendChild(nameCell);
+                row.appendChild(massCell);
+                row.appendChild(orbitalRadiusCell);
+                row.appendChild(colorCell);
+                row.appendChild(diameterCell);
+
+                tbody.appendChild(row);
+            });
+
+            table.appendChild(thead);
+            table.appendChild(tbody);
+
+            // 实现表格列排序功能
+            headers.forEach((header, index) => {
+                const th = thead.querySelector(`th:nth-child(${index + 1})`);
+                th.addEventListener('click', function () {
+                    const rows = Array.from(tbody.querySelectorAll('tr'));
+                    rows.sort((a, b) => {
+                        const aValue = a.querySelectorAll('td')[index].textContent;
+                        const bValue = b.querySelectorAll('td')[index].textContent;
+                        if (typeof aValue === 'number' && typeof bValue === 'number') {
+                            return aValue - bValue;
+                        }
+                        return aValue.localeCompare(bValue);
+                    });
+                    rows.forEach(row => tbody.appendChild(row));
+                });
+            });
+
+            const tableContainer = document.getElementById('tableContainer');
+            tableContainer.appendChild(table);
+        });
+    </script>
+</body>
+
+</html>
